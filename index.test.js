@@ -7,6 +7,6 @@ app.use(router);
 describe('Index JS routes', () => {
     test("GET /healthz", async () => {
         const res = await request(app).get('/healthz');
-        expect(res.statusCode).toBe(200);
+        expect(res.statusCode).toBe(100);
       });
 });
