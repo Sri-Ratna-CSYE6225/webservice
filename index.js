@@ -31,4 +31,4 @@ app.listen(portNumber, () => {
     console.log("Listening Port 3000");
 });
 
-export default router;
+module.exports = router;
