@@ -19,4 +19,4 @@ jobs:
        - name: Install
          run: npm ci
        - name: Test
-         run: npm start & npm test
+         run: npm test
