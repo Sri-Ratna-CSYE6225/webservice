@@ -17,8 +17,8 @@ jobs:
            node-version: 10.x
            cache: npm
        - name: Install
-         run: npm install
+         run: npm ci
        - name: Build
-         run: npm start
+         run: npm run build
        - name: Test
          run: npm test
