@@ -16,5 +16,7 @@ jobs:
          with:
            node-version: 10.x
            cache: npm
-       - run: npm start
-       - run: npm test
+       - name: Build
+         run: npm start
+       - name: Test
+         run: npm test
