@@ -9,5 +9,8 @@
     "plugins": [
       "@babel/plugin-proposal-class-properties",
       "@babel/plugin-proposal-object-rest-spread"
-    ]
+    ],
+    "scripts":{
+        "build": "webpack --config=Scripts/config/webpack.prod.js"
+    }
   }
