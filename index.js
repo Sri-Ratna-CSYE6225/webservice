@@ -5,12 +5,14 @@ router.use(express.json());
 const app = express();
 const portNumber = 3000;
 const userRoutes = require('./controllers/users.controller');
+const basicAuthentication = require('./utils/authenticate');
 router.get("/healthz", (request,response) =>{
     response.sendStatus(200);
 });
 
 app.use(router);
-app.use('/v1/user', userRoutes);
+app.use('/v1/user', userRoutes.router);
+app.use(basicAuthentication);
 app.use(function(req, res, next) {
     res.header("Access-Control-Allow-Origin", "*");
     res.header(
@@ -21,7 +23,8 @@ app.use(function(req, res, next) {
     res.header("Access-Control-Request-Headers", "x-access-token");
     next();
 });
-
+const db = require("./db");
+db.sequelize.sync();
 
 app.get("*", function(req, res) {
     res.send("Page Not Found");

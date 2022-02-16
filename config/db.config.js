@@ -1,15 +1,18 @@
 const env = process.env;
 
 const config = {
-  db: { /* do not put password or any sensitive info here, done only for demo */
+  db: {
     host: env.DB_HOST || 'localhost',
     user: env.DB_USER || 'root',
     password: env.DB_PASSWORD || 'Ratna@18',
     database: env.DB_NAME || 'users',
-    waitForConnections: true,
-    connectionLimit: env.DB_CONN_LIMIT || 2,
-    queueLimit: 0,
-    debug: env.DB_DEBUG || false
+    dialect: "mysql",
+    pool: {
+    max: 5,
+    min: 0,
+    acquire: 30000,
+    idle: 10000
+    }
   }
 };
   
