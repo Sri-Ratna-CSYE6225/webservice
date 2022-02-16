@@ -4,15 +4,15 @@ const router = express.Router();
 router.use(express.json());
 const app = express();
 const portNumber = 3000;
-const userRoutes = require('./controllers/users.controller');
+const userRoutes = require('./routes/userRoutes.js');
 const basicAuthentication = require('./utils/authenticate');
 router.get("/healthz", (request,response) =>{
     response.sendStatus(200);
 });
 
 app.use(router);
-app.use('/v1/user', userRoutes.router);
-app.use(basicAuthentication);
+app.use('/v1/user', userRoutes);
+// app.use(basicAuthentication);
 app.use(function(req, res, next) {
     res.header("Access-Control-Allow-Origin", "*");
     res.header(
@@ -34,4 +34,3 @@ app.listen(portNumber, () => {
     console.log("Listening Port 3000");
 });
 
-module.exports = router;
