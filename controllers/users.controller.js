@@ -10,9 +10,7 @@ async function createUser(req, res, next){
     var hashedPassword = await bcrypt.hash(req.body.password, 10);
     const emailRegexp = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/;
     if(!emailRegexp.test(req.body.username)){
-        res.status(400).send({
-            message: "Enter emailId in correct format. eg:abc@xyz.com"
-        });
+        res.status(400).send();
     }
     const getUser = await User.findOne({where : {username: req.body.username}}).catch(err => {
         res.status(500).send({
@@ -21,9 +19,7 @@ async function createUser(req, res, next){
           });
     });
     if(getUser){
-        res.status(400).send({
-            message: "User already exists."
-        });
+        res.status(400).send();
     } else{
     var user ={
             id: uuidv4(),
@@ -73,7 +69,8 @@ async function getUser(req, res, next){
   }
 
 async function updateUser(req, res, next){
-    if(req.body.username != req.user.username){
+    if(req.body.username != req.user.username || req.body.hasOwnProperty('id') || req.body.hasOwnProperty('account_created') ||
+    req.body.hasOwnProperty('account_updated')){
         res.sendStatus(400);
     }
     User.update({ 
