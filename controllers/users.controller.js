@@ -1,13 +1,12 @@
-const express = require('express');
-const router = express.Router();
+// const express = require('express');
+// const router = express.Router();
 const db = require('../db');
 const bcrypt = require('bcrypt');
 const {v4:uuidv4} = require('uuid');
-const basicAuthentication = require('../utils/authenticate');
 const User = db.users;
 /* POST/CREATE a user */
-router.post('/', async function(req, res, next) {
-    console.log("-------------", req.body);
+// router.post('/', async function(req, res, next) {
+async function createUser(req, res, next){
     var hashedPassword = await bcrypt.hash(req.body.password, 10);
     const emailRegexp = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/;
     if(!emailRegexp.test(req.body.username)){
@@ -52,10 +51,11 @@ router.post('/', async function(req, res, next) {
           });
         });
     }
-  });
+  }
 
-  router.get('/self', basicAuthentication(), async function(req, res, next) {
-    const user = await User.findOne({where : {username: req.params.username}});
+//   router.get('/self', basicAuthentication(), async function(req, res, next) {
+async function getUser(req, res, next){
+    const user = await getUserByUserName(req.user.username);
     if(user){
         res.status(200).send({
             id: user.dataValues.id,
@@ -70,21 +70,42 @@ router.post('/', async function(req, res, next) {
             message: "User not found"
         });
     }    
-  });
-
- async function authenticateUser(username, password){
-    const user = User.findOne({where : {username: username}});
-    if(user.dataValues){
-        bcrypt.compare(user.dataValues.password, password, function(err, res){
-            if(res){
-                return true;
-            } else {
-                return false;
-            }
-        });
-    }
   }
+
+async function updateUser(req, res, next){
+    if(req.body.username != req.user.username){
+        res.sendStatus(400);
+    }
+    User.update({ 
+    first_name: req.body.first_name,
+    last_name: req.body.last_name,
+    password: await bcrypt.hash(req.body.password, 10)
+}, {where : {username: req.user.username}}).then((result) => {
+    if(result == 1){
+        res.sendStatus(204);
+    } else {
+        res.sendStatus(400);
+    }
+}).catch(err => {
+    res.status(500).send({
+        message: "Error updating user"
+      });
+});
+
+}
+
+ async function getUserByUserName(username){
+    return User.findOne({where : {username: username}});
+  }
+
+  async function comparePasswords(existingPassword, currentPassword){
+    return bcrypt.compare(existingPassword, currentPassword);
+  }
+
   module.exports = {
-      router: router,
-      authenticateUser: authenticateUser
+      createUser: createUser,
+      getUser: getUser,
+      getUserByUserName: getUserByUserName,
+      comparePasswords: comparePasswords,
+      updateUser: updateUser
   };
