@@ -17,13 +17,13 @@ return[
     var isValid;
    await getUserByUserName(username, password).then(async (response) => {
         if(!response){
-            return res.sendStatus(401);
+            return res.status(401).send({message: "Invalid Credentials!"});
         }
          isValid = await comparePasswords(password, response.dataValues.password);
     });
 
     if (!isValid) {
-        return res.sendStatus(401);
+        return res.status(401).send({message: "Invalid Credentials!"});
     } else{
         req.user = {username: username, password: password};
          next();
