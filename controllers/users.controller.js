@@ -10,7 +10,7 @@ async function createUser(req, res, next){
     var hashedPassword = await bcrypt.hash(req.body.password, 10);
     const emailRegexp = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/;
     if(!emailRegexp.test(req.body.username)){
-        res.status(400).send();
+        res.status(400).send({message : "Enter email in proper format!! eg:abc@def.com"});
     }
     const getUser = await User.findOne({where : {username: req.body.username}}).catch(err => {
         res.status(500).send({
@@ -19,7 +19,7 @@ async function createUser(req, res, next){
           });
     });
     if(getUser){
-        res.status(400).send();
+        res.status(400).send({message : "User already exists!!"});
     } else{
     var user ={
             id: uuidv4(),
