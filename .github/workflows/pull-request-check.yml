@@ -34,6 +34,7 @@ jobs:
       - name: Validate Packer template
         uses: ExitoLab/packer_build_action_aws@v0.2.10
         with:
-          templateFile: 'webservice/ami.json'
+          templateFile: 'ami.json'
+          workingDir: '/'
           varFile: 'dev-vars.json'
         
