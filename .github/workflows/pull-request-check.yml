@@ -39,5 +39,5 @@ jobs:
         with:
           templateFile: 'ami.json'
           workingDir: 'ami'
-          varFile: 'dev-vars.json'
+          varFile: '../dev-vars.json'
         
