@@ -46,15 +46,14 @@
         },
         {
             "type" : "file",
-            "source" : "./dist",
+            "source" : "../../webservice",
             "destination": "/home/ec2-user/node-app"
         },
         {
             "type": "shell",
             "inline": [
                 "cd /home/ec2-user/node-app",
-                "sudo pm2 start index.js",
-                "sudo pm2 startup systemd"
+                "sudo pm2 start index.js"
             ]
         }
     ]
