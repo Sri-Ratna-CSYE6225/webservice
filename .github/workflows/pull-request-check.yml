@@ -38,6 +38,5 @@ jobs:
         uses: ExitoLab/packer_build_action_aws@v0.2.10
         with:
           templateFile: 'ami.json'
-          workingDir: 'ami'
-          varFile: '../dev-vars.json'
+          varFile: 'dev-vars.json'
         
