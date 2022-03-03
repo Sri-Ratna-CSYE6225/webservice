@@ -19,13 +19,13 @@
             "source_ami": "{{user `source_ami`}}",
             "ssh_username": "{{user `ssh_username`}}",
             "ami_name": "csye6225_{{timestamp}}",
-            "ami_description": "Ubuntu AMI for CSYE 6225",
+            "ami_description": "Linux2 AMI for CSYE 6225",
             "ami_users": ["288204448093", "277616309531"],
             "ami_block_device_mappings": [
                 {
                 "delete_on_termination": true,
-                "device_name": "/dev/sda1",
-                "volume_size": 60,
+                "device_name": "/dev/xvda",
+                "volume_size": 20,
                 "volume_type": "gp2"
                 }
                 ],
@@ -45,6 +45,19 @@
             "script": "script1.sh"
         },
         {
+            "type": "shell",
+            "inline" : [
+                "sudo yum -y install https://dev.mysql.com/get/mysql80-community-release-el7-5.noarch.rpm",
+                    "echo 'Install community server'",
+                    "sudo yum -y install mysql-community-server",
+                    "sudo systemctl enable --now mysqld",
+                    "systemctl status mysqld",
+                    "passwords=$(sudo grep 'temporary password' /var/log/mysqld.log | awk {'print $13'})",
+                    "mysql --connect-expired-password -u root -p$passwords -e \"ALTER USER 'root'@'localhost' IDENTIFIED BY 'Hello@1234';\"",
+                    "mysql -u root -pHello@1234 -e \"create database userdetails;\""
+            ]
+        },
+        {
             "type" : "file",
             "source" : "./",
             "destination": "/home/ec2-user/node-app"
@@ -53,7 +66,14 @@
             "type": "shell",
             "inline": [
                 "cd /home/ec2-user/node-app",
-                "sudo pm2 start index.js"
+                "sudo npm install",
+                "sudo pm2 start index.js",
+                "sudo pm2 startup systemd",
+                "sudo pm2 save",
+                "sudo ln -s /home/ec2-user/node-app/node-service.service /etc/systemd/system/node-service.service",
+                "sudo systemctl daemon-reload",
+                "sudo systemctl enable node-service.service",
+                "sudo systemctl start node-service.service"
             ]
         }
     ]
