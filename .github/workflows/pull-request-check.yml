@@ -28,13 +28,13 @@ jobs:
            path: |
              dist
              !dist/**/*.md
-    packer:
-      runs-on: ubuntu-latest
-      steps:
-      - name: Validate Packer template
-        uses: ExitoLab/packer_build_action_aws@v0.2.10
-        with:
-          templateFile: 'ami.json'
-          workingDir: './'
-          varFile: 'dev-vars.json'
+    # packer:
+    #   runs-on: ubuntu-latest
+    #   steps:
+    #   - name: Validate Packer template
+    #     uses: ExitoLab/packer_build_action_aws@v0.2.10
+    #     with:
+    #       templateFile: 'ami.json'
+    #       workingDir: './'
+    #       varFile: 'dev-vars.json'
         
