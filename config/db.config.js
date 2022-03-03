@@ -4,7 +4,7 @@ const config = {
   db: {
     host: env.DB_HOST || 'localhost',
     user: env.DB_USER || 'root',
-    password: env.DB_PASSWORD || 'Ratna@18',
+    password: env.DB_PASSWORD || 'Hello@1234',
     database: env.DB_NAME || 'users',
     dialect: "mysql",
     pool: {
