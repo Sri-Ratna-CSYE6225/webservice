@@ -46,7 +46,7 @@
         },
         {
             "type" : "file",
-            "source" : "../../webservice",
+            "source" : "./",
             "destination": "/home/ec2-user/node-app"
         },
         {
