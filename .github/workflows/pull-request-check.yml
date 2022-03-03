@@ -32,6 +32,8 @@ jobs:
     packer:
       runs-on: ubuntu-latest
       steps:
+      - name: checkout repository
+        uses: actions/checkout@v2
       - name: Validate Packer template
         uses: ExitoLab/packer_build_action_aws@v0.2.10
         with:
