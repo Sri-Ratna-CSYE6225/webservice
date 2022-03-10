@@ -45,19 +45,6 @@
             "script": "script1.sh"
         },
         {
-            "type": "shell",
-            "inline" : [
-                "sudo yum -y install https://dev.mysql.com/get/mysql80-community-release-el7-5.noarch.rpm",
-                    "echo 'Install community server'",
-                    "sudo yum -y install mysql-community-server",
-                    "sudo systemctl enable --now mysqld",
-                    "systemctl status mysqld",
-                    "passwords=$(sudo grep 'temporary password' /var/log/mysqld.log | awk {'print $13'})",
-                    "mysql --connect-expired-password -u root -p$passwords -e \"ALTER USER 'root'@'localhost' IDENTIFIED BY 'Hello@1234';\"",
-                    "mysql -u root -pHello@1234 -e \"create database users;\""
-            ]
-        },
-        {
             "type" : "file",
             "source" : "./",
             "destination": "/home/ec2-user/node-app"
@@ -76,5 +63,5 @@
                 "sudo systemctl start node-service.service"
             ]
         }
-    
+    ]
 }

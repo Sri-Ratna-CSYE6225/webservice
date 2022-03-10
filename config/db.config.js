@@ -1,11 +1,10 @@
 const env = process.env;
-
 const config = {
   db: {
-    host: env.DB_HOST || 'localhost',
-    user: env.DB_USER || 'root',
-    password: env.DB_PASSWORD || 'Hello@1234',
-    database: env.DB_NAME || 'users',
+    host: env.DB_HOST || 'csye6225.cslvthzxy1ut.us-east-1.rds.amazonaws.com',
+    user: env.DB_USER || 'csye6225',
+    password: env.DB_PASSWORD || 'Lolol12345',
+    database: env.DB_NAME || 'csye6225',
     dialect: "mysql",
     pool: {
     max: 5,
