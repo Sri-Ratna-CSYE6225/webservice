@@ -91,6 +91,9 @@ async function updateUser(req, res, next){
 
 }
 
+async function uploadPic(req, res, next){
+    console.log(req.files)
+}
  async function getUserByUserName(username){
     return User.findOne({where : {username: username}});
   }
@@ -104,5 +107,6 @@ async function updateUser(req, res, next){
       getUser: getUser,
       getUserByUserName: getUserByUserName,
       comparePasswords: comparePasswords,
-      updateUser: updateUser
+      updateUser: updateUser,
+      uploadPic: uploadPic
   };

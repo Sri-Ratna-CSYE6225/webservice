@@ -5,6 +5,10 @@ const config = {
     user: env.DB_USER || 'csye6225',
     password: env.DB_PASSWORD || 'Lolol12345',
     database: env.DB_NAME || 'csye6225',
+    // host: env.DB_HOST || 'localhost',
+    // user: env.DB_USER || 'root',
+    // password: env.DB_PASSWORD || 'mysql123',
+    // database: env.DB_NAME || 'users',
     dialect: "mysql",
     pool: {
     max: 5,
