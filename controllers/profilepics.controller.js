@@ -6,21 +6,89 @@ const {getUserByUserName} = require('./users.controller');
 const fs = require("fs");
 const AWS = require('aws-sdk');
 const moment = require("moment");
-AWS.config.getCredentials(function(err) {
-    if (err) console.log(err.stack); 
-    s3 = new AWS.S3(
-      {
-          accessKeyId: AWS.config.credentials.accessKeyId,
-          secretAccessKey: AWS.config.credentials.accessKeyId
-      }
-  );
-  });
+var s3;
+async function getEC2Rolename(AWS){
+    var promise = new Promise((resolve,reject)=>{
+        
+        var metadata = new AWS.MetadataService();
+        
+        metadata.request('/latest/meta-data/iam/security-credentials/',function(err,rolename){
+            if(err) reject(err);
+            console.log(rolename);            
+            resolve(rolename);
+        });
+    });
+        
+    return promise;
+};
 
+function getEC2Credentials(AWS,rolename){
+    var promise = new Promise((resolve,reject)=>{
+        
+        var metadata = new AWS.MetadataService();
+        
+        metadata.request('/latest/meta-data/iam/security-credentials/'+rolename,function(err,data){
+            if(err) reject(err);   
+            
+            resolve(JSON.parse(data));            
+        });
+    });
+        
+    return promise;
+};
+function getEC2Credentials(AWS,rolename){
+    var promise = new Promise((resolve,reject)=>{
+        
+        var metadata = new AWS.MetadataService();
+        
+        metadata.request('/latest/meta-data/iam/security-credentials/'+rolename,function(err,data){
+            if(err) reject(err);   
+            
+            resolve(JSON.parse(data));            
+        });
+    });
+        
+    return promise;
+};
 
+async function setCred(){
+    getEC2Rolename(AWS)
+    .then((rolename)=>{
+        console.log('------------role--------', rolename);
+        return getEC2Credentials(AWS,rolename)
+     
+    })
+    .then((credentials)=>{
+        AWS.config.update({region:'us-east-1'});
+        console.log('------------crede--------', credentials);
+        s3 = new AWS.S3({
+            accessKeyId: credentials.accessKeyId,
+            secretAccessKey: credentials.secretAccessKey,
+            region: 'us-east-1'
+        });
+})
+    .catch((err)=>{
+        console.log(err);
+    });
+
+}
 async function createProfilePic(req, res, next){
-    var fileData;
+    getEC2Rolename(AWS)
+    .then((rolename)=>{
+        console.log('------------role--------', rolename);
+        return getEC2Credentials(AWS,rolename)
+     
+    })
+    .then(async(credentials)=>{
+        AWS.config.update({region:'us-east-1'});
+        console.log('------------crede--------', credentials);
+        s3 = new AWS.S3({
+            accessKeyId: credentials.accessKeyId,
+            secretAccessKey: credentials.secretAccessKey,
+            region: 'us-east-1'
+        });
+        var fileData;
     const user = await getUserByUserName(req.user.username);
-    try {
         
         fs.writeFile("./uploads/image.jpeg", req.body, async (error) => {
             console.log(req.body)
@@ -40,7 +108,6 @@ async function createProfilePic(req, res, next){
                   throw err;
               }
               fileData = data;
-              const profile = await getProfilePicByUserId(user.id);
         var profile_pic = {
             file_name: fileData.key,
             id:uuidv4(),
@@ -66,9 +133,9 @@ async function createProfilePic(req, res, next){
           });
         });
     });
-      } catch (error) {
-        res.sendStatus(500);
-      }
+      
+    });
+    
     }
 
 async function getProfilePic(req, res, next){
@@ -93,6 +160,7 @@ async function deleteProfilePic(req, res, next){
     if(!profile){
         res.sendStatus(404);
     }
+    Profile.destroy({where:{id: profile.id}});
     const params = {
         Bucket: process.env.S3_BUCKET_NAME,
         Key: profile.file_name
@@ -102,6 +170,7 @@ async function deleteProfilePic(req, res, next){
           res.status(400).send(error);
         }
         res.sendStatus(204);
+        Profile.destroy({where: {id: profile.id}});
       });
 }
 async function getProfilePicByUserId(userId){
