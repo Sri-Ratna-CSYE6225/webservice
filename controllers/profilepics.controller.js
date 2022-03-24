@@ -160,18 +160,19 @@ async function deleteProfilePic(req, res, next){
     if(!profile){
         res.sendStatus(404);
     }
-    Profile.destroy({where:{id: profile.id}});
     const params = {
         Bucket: process.env.S3_BUCKET_NAME,
-        Key: profile.file_name
+        Key: `${user.id}/profile.jpeg`
     };
-    s3.deleteObject(params, (error, data) => {
+    await s3.deleteObject(params, (error, data) => {
         if (error) {
           res.status(400).send(error);
         }
-        res.sendStatus(204);
-        Profile.destroy({where: {id: profile.id}});
-      });
+        else{
+          Profile.destroy({where:{id: profile.id}});
+          res.sendStatus(204);
+        }
+      }).promise();
 }
 async function getProfilePicByUserId(userId){
     return Profile.findOne({where : {user_id: userId}});
