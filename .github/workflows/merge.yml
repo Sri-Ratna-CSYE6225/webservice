@@ -52,6 +52,12 @@ jobs:
           aws-secret-access-key: ${{env.AWS_SECRET_KEY}}
           aws-region: ${{env.AWS_REGION}}
 
+      - name: Build Packer
+        uses: ExitoLab/packer_build_action_aws@v0.2.10
+        with:
+          templateFile: 'ami.json'
+          varFile: 'dev-vars.json'
+          
       - name: Copy Artifact to S3
         run: |
           aws s3 sync ./codedeploy_artifact s3://${{secrets.S3_CODEDEPLOY_BUCKET}}
@@ -70,8 +76,4 @@ jobs:
             depId=$(echo $output | jq -r '.deploymentId')
             aws deploy wait deployment-successful --deployment-id $depIdq
 
-      - name: Build Packer
-        uses: ExitoLab/packer_build_action_aws@v0.2.10
-        with:
-          templateFile: 'ami.json'
-          varFile: 'dev-vars.json'
+      
