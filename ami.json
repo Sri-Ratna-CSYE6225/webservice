@@ -11,9 +11,9 @@
         {
             "type": "amazon-ebs",
             "profile": "dev",
-            "access_key": "{{user `AWS_ACCESS_KEY_ID`}}",
-            "secret_key": "{{user `AWS_SECRET_ACCESS_KEY`}}",
-            "region": "{{user `AWS_REGION`}}",
+            "access_key": "{{user `aws-access-key-id`}}",
+            "secret_key": "{{user `aws-secret-access-key`}}",
+            "region": "{{user `aws-region`}}",
             "instance_type": "t2.micro",
             "subnet_id": "{{user `subnet_id`}}",
             "source_ami": "{{user `source_ami`}}",
