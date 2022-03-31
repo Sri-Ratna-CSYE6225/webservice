@@ -18,3 +18,4 @@ Once application starts running, you can test api in postman or chrome by using 
 Runs unit test cases for the application
 (Jest is used to write test cases for webservice)
 --test
+--assignment-7-test
