@@ -17,7 +17,7 @@ sudo systemctl enable node-app
 
 sudo systemctl start node-app
 
-sudo pm2 reload all --update-env
+sudo pm2 restart all --update-env
 
 sudo pm2 start index.js
 
