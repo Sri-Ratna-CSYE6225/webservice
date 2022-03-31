@@ -1,4 +1,4 @@
-cd /home/ec2-user/webapp
+cd /home/ec2-user/node-app
 pwd
 ls
 pm2 stop all

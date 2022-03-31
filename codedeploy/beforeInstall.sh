@@ -1,3 +1,3 @@
 
-cd /home/ec2-user/node-app
-sudo rm -rf webapp node_modules package-lock.json
+cd /home/ec2-user/
+sudo rm -rf node-app
