@@ -8,7 +8,7 @@ const portNumber = 3000;
 const userRoutes = require('./routes/userRoutes.js');
 const basicAuthentication = require('./utils/authenticate');
 const controller = require('./controllers/profilepics.controller');
-router.get("/healthz", (request,response) =>{
+router.get("/health", (request,response) =>{
     response.sendStatus(200);
 });
 const AWS = require('aws-sdk');
