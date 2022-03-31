@@ -8,9 +8,9 @@ curl -sL https://rpm.nodesource.com/setup_14.x | sudo -E bash -
 sudo yum install -y nodejs 
 sudo npm install -g pm2
 node --version
-sudo apt-get install -y ruby
-sudo apt-get install -y wget
-cd /home/ubuntu
+sudo yum install -y ruby
+sudo yum install -y wget
+cd /home/ec2-user
 wget https://aws-codedeploy-us-east-1.s3.us-east-1.amazonaws.com/latest/install
 chmod +x ./install
 sudo ./install auto
