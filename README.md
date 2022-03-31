@@ -19,3 +19,5 @@ Runs unit test cases for the application
 (Jest is used to write test cases for webservice)
 --test
 --assignment-7-test
+--review
+-- assignment-6
