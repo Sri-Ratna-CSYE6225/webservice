@@ -73,7 +73,7 @@
             "inline": [
                 "sleep 30",
                 "sudo mv cloudwatch-config.json /opt/",
-				"sudo /opt/aws/amazon-cloudwatch-agent/bin/amazon-cloudwatch-agent-ctl -a fetch-config -m ec2 -c file:/home/ec2-user/node-app/amazon-cloudwatch-agent.json -s"
+				"sudo /opt/aws/amazon-cloudwatch-agent/bin/amazon-cloudwatch-agent-ctl -a fetch-config -m ec2 -c file:/home/ec2-user/node-app/cloudwatch-config.json -s"
             ]
         }
     ]
