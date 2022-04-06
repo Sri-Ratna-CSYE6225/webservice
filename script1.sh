@@ -10,6 +10,7 @@ sudo npm install -g pm2
 node --version
 sudo yum install -y ruby
 sudo yum install -y wget
+sudo yum install -y amazon-cloudwatch-agent
 cd /home/ec2-user
 wget https://aws-codedeploy-us-east-1.s3.us-east-1.amazonaws.com/latest/install
 chmod +x ./install

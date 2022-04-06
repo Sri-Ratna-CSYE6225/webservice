@@ -6,7 +6,8 @@ const {getUserByUserName} = require('./users.controller');
 const fs = require("fs");
 const AWS = require('aws-sdk');
 const moment = require("moment");
-var s3;
+const StatsD = require('node-statsd');
+client = new StatsD();
 async function getEC2Rolename(AWS){
     var promise = new Promise((resolve,reject)=>{
         
@@ -61,7 +62,7 @@ async function setCred(){
     .then((credentials)=>{
         AWS.config.update({region:'us-east-1'});
         console.log('------------crede--------', credentials);
-        s3 = new AWS.S3({
+        var s3 = new AWS.S3({
             accessKeyId: credentials.accessKeyId,
             secretAccessKey: credentials.secretAccessKey,
             region: 'us-east-1'
@@ -73,6 +74,8 @@ async function setCred(){
 
 }
 async function createProfilePic(req, res, next){
+    var s3;
+    client.increment('add-profile-pic-api');
     getEC2Rolename(AWS)
     .then((rolename)=>{
         console.log('------------role--------', rolename);
@@ -139,6 +142,7 @@ async function createProfilePic(req, res, next){
     }
 
 async function getProfilePic(req, res, next){
+    client.increment('get-profile-pic-api');
     const user = await getUserByUserName(req.user.username);
     const profile = await getProfilePicByUserId(user.id);
     if(profile){
@@ -155,6 +159,22 @@ async function getProfilePic(req, res, next){
 }
 
 async function deleteProfilePic(req, res, next){
+    var s3;
+    client.increment('delete-profile-pic-api');
+    getEC2Rolename(AWS)
+    .then((rolename)=>{
+        console.log('------------role--------', rolename);
+        return getEC2Credentials(AWS,rolename)
+     
+    })
+    .then(async(credentials)=>{
+        AWS.config.update({region:'us-east-1'});
+        console.log('------------crede--------', credentials);
+        s3 = new AWS.S3({
+            accessKeyId: credentials.accessKeyId,
+            secretAccessKey: credentials.secretAccessKey,
+            region: 'us-east-1'
+        });
     const user = await getUserByUserName(req.user.username);
     const profile = await getProfilePicByUserId(user.id);
     if(!profile){
@@ -173,6 +193,7 @@ async function deleteProfilePic(req, res, next){
           res.sendStatus(204);
         }
       }).promise();
+    });
 }
 async function getProfilePicByUserId(userId){
     return Profile.findOne({where : {user_id: userId}});
