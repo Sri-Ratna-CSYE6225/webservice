@@ -3,10 +3,13 @@
 const db = require('../db');
 const bcrypt = require('bcrypt');
 const {v4:uuidv4} = require('uuid');
+const StatsD = require('node-statsd');
+client = new StatsD();
 const User = db.users;
 /* POST/CREATE a user */
 // router.post('/', async function(req, res, next) {
 async function createUser(req, res, next){
+    client.increment('create-user-api');
     var hashedPassword = await bcrypt.hash(req.body.password, 10);
     const emailRegexp = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/;
     if(!emailRegexp.test(req.body.username)){
@@ -51,6 +54,7 @@ async function createUser(req, res, next){
 
 //   router.get('/self', basicAuthentication(), async function(req, res, next) {
 async function getUser(req, res, next){
+    client.increment('get-user-api');
     const user = await getUserByUserName(req.user.username);
     if(user){
         res.status(200).send({
@@ -69,6 +73,7 @@ async function getUser(req, res, next){
   }
 
 async function updateUser(req, res, next){
+    client.increment('update-user-api');
     if(req.body.username != req.user.username || req.body.hasOwnProperty('id') || req.body.hasOwnProperty('account_created') ||
     req.body.hasOwnProperty('account_updated')){
         res.sendStatus(400);

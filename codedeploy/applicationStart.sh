@@ -8,3 +8,4 @@ sudo systemctl restart node-service.service
 sudo pm2 start index.js
 if [ $? == 0 ]; then echo "Application has started successfully"; else echo "Something went wrong while starting the application"; fi
 sudo pm2 status
+sudo /opt/aws/amazon-cloudwatch-agent/bin/amazon-cloudwatch-agent-ctl -a fetch-config -m ec2 -c file:/home/ubuntu/webapp/amazon-cloudwatch-agent.json -s
