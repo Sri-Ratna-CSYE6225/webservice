@@ -13,7 +13,7 @@ var StatsD = require('node-statsd'),
       host: 'localhost',
       port: 8125
     });
-router.get("/healthz", (request,response) =>{
+router.get("/health", (request,response) =>{
     client.increment('healthz-api');
     logger.info("Healthz API success");
     response.sendStatus(200);
