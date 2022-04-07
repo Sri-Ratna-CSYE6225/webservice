@@ -10,12 +10,13 @@ const basicAuthentication = require('./utils/authenticate');
 const controller = require('./controllers/profilepics.controller');
 const StatsD = require('node-statsd');
 
-client = new StatsD({
+const client = new StatsD({
   host: 'localhost',
   port: 8125
 });
 router.get("/healthz", (request,response) =>{
-    client.increment('healthz api');
+    client.increment('healthz-api');
+    logger.info("Healthz API success");
     response.sendStatus(200);
 });
 const AWS = require('aws-sdk');
@@ -48,6 +49,7 @@ app.delete("/v1/user/self/pic",
   basicAuthentication(),
 controller.deleteProfilePic);
 const db = require("./db");
+const logger = require('./utils/logger.js');
 db.sequelize.sync();
 
 app.get("*", function(req, res) {

@@ -8,7 +8,7 @@ const AWS = require('aws-sdk');
 const moment = require("moment");
 const StatsD = require('node-statsd');
 const logger = require('../utils/logger');
-client = new StatsD({
+const client = new StatsD({
     host: 'localhost',
     port: 8125
 });

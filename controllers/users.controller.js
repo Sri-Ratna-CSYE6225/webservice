@@ -5,7 +5,7 @@ const bcrypt = require('bcrypt');
 const {v4:uuidv4} = require('uuid');
 const StatsD = require('node-statsd');
 const logger = require('../utils/logger');
-client = new StatsD({
+const client = new StatsD({
     host: 'localhost',
     port: 8125
 });
