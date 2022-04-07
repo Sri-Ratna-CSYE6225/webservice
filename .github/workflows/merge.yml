@@ -52,7 +52,7 @@ jobs:
         uses: ExitoLab/packer_build_action_aws@v0.2.10
         with:
           templateFile: 'ami.json'
-          varFile: 'dev-vars.json'
+          varFile: 'demo-vars.json'
         env:
           AWS_REGION: us-east-1
           AWS_ACCESS_KEY: ${{ secrets.AWS_ACCESS_KEY }}
