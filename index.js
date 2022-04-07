@@ -8,12 +8,11 @@ const portNumber = 3000;
 const userRoutes = require('./routes/userRoutes.js');
 const basicAuthentication = require('./utils/authenticate');
 const controller = require('./controllers/profilepics.controller');
-const StatsD = require('node-statsd');
-
-const client = new StatsD({
-  host: 'localhost',
-  port: 8125
-});
+var StatsD = require('node-statsd'),
+    client = new StatsD({
+      host: 'localhost',
+      port: 8125
+    });
 router.get("/healthz", (request,response) =>{
     client.increment('healthz-api');
     logger.info("Healthz API success");
