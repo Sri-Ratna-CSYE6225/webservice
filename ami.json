@@ -1,7 +1,7 @@
 {
     "variables": {
-        "aws_access_key": "AKIAUGGSS4FOWBQKHT5Z",
-        "aws_secret_key": "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",
+        "aws_access_key": "{{env `AWS_ACCESS_KEY`}}",
+        "aws_secret_key": "{{env `AWS_SECRET_KEY`}}",
         "aws_region": "us-east-1",
         "subnet_id": "subnet-083d070a8037b737e",
         "source_ami": "ami-033b95fb8079dc481",
