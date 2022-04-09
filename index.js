@@ -22,7 +22,7 @@ const AWS = require('aws-sdk');
 
 // console.log('-------dsadasda----------',AWS.config.credentials);
 app.use(router);
-app.use('/v1/user', userRoutes);
+app.use('/v2/user', userRoutes);
 app.use(function(req, res, next) {
     res.header("Access-Control-Allow-Origin", "*");
     res.header(
@@ -33,17 +33,17 @@ app.use(function(req, res, next) {
     res.header("Access-Control-Request-Headers", "x-access-token");
     next();
 });
-app.post("/v1/user/self/pic",
+app.post("/v2/user/self/pic",
   bodyParser.raw({type: ["image/jpeg", "image/png"], limit: "5mb"}),
   basicAuthentication(),
 controller.createProfilePic);
 
-  app.get("/v1/user/self/pic",
+  app.get("/v2/user/self/pic",
   bodyParser.raw({type: ["image/jpeg", "image/png", "image/jpg"], limit: "5mb"}),
   basicAuthentication(),
 controller.getProfilePic);
 
-app.delete("/v1/user/self/pic",
+app.delete("/v2/user/self/pic",
   bodyParser.raw({type: ["image/jpeg", "image/png", "image/jpg"], limit: "5mb"}),
   basicAuthentication(),
 controller.deleteProfilePic);
