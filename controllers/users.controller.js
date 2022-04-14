@@ -157,7 +157,7 @@ async function updateUser(req, res, next){
     req.body.hasOwnProperty('account_updated')){
         res.sendStatus(400);
         logger.error("Error in request body");
-    }
+    }else{
     User.update({ 
     first_name: req.body.first_name,
     last_name: req.body.last_name,
@@ -175,7 +175,7 @@ async function updateUser(req, res, next){
         message: "Error updating user"
       });
       logger.error({"Error updating user": err});
-});
+});}
     } else {
         res.status(401).send({
             message: "User not yet verified"
