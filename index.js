@@ -13,7 +13,7 @@ var StatsD = require('node-statsd'),
       host: 'localhost',
       port: 8125
     });
-router.get("/health", (request,response) =>{
+router.get("/healthz", (request,response) =>{
     client.increment('healthz-api');
     logger.info("Healthz API success");
     response.sendStatus(200);
@@ -21,7 +21,7 @@ router.get("/health", (request,response) =>{
 const AWS = require('aws-sdk');
 
 app.use(router);
-app.use('/v2/user', userRoutes);
+app.use('/v1/user', userRoutes);
 app.use(function(req, res, next) {
     res.header("Access-Control-Allow-Origin", "*");
     res.header(
