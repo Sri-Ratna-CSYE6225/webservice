@@ -19,7 +19,7 @@ router.get("/healthz", (request,response) =>{
     response.sendStatus(200);
 });
 const AWS = require('aws-sdk');
-
+console.log("test");
 app.use(router);
 app.use('/v1/user', userRoutes);
 app.use(function(req, res, next) {
