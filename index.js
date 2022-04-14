@@ -32,17 +32,17 @@ app.use(function(req, res, next) {
     res.header("Access-Control-Request-Headers", "x-access-token");
     next();
 });
-app.post("/v2/user/self/pic",
+app.post("/v1/user/self/pic",
   bodyParser.raw({type: ["image/jpeg", "image/png"], limit: "5mb"}),
   basicAuthentication(),
 controller.createProfilePic);
 
-  app.get("/v2/user/self/pic",
+  app.get("/v1/user/self/pic",
   bodyParser.raw({type: ["image/jpeg", "image/png", "image/jpg"], limit: "5mb"}),
   basicAuthentication(),
 controller.getProfilePic);
 
-app.delete("/v2/user/self/pic",
+app.delete("/v1/user/self/pic",
   bodyParser.raw({type: ["image/jpeg", "image/png", "image/jpg"], limit: "5mb"}),
   basicAuthentication(),
 controller.deleteProfilePic);
