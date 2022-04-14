@@ -21,7 +21,7 @@ router.get("/health", (request,response) =>{
 const AWS = require('aws-sdk');
 
 app.use(router);
-app.use('/v1/user', userRoutes);
+app.use('/v2/user', userRoutes);
 app.use(function(req, res, next) {
     res.header("Access-Control-Allow-Origin", "*");
     res.header(
