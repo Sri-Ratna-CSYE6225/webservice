@@ -49,7 +49,10 @@ app.delete("/v1/user/self/pic",
 controller.deleteProfilePic);
 const db = require("./db");
 const logger = require('./utils/logger.js');
+const { verifyUser } = require('./utils/verifyUser.js');
 db.sequelize.sync();
+
+app.get("/v1/verifyUserEmail", verifyUser);
 
 app.get("*", function(req, res) {
     res.send("Page Not Found");

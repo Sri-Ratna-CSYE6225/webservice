@@ -16,6 +16,10 @@ module.exports = (sequelize, Sequelize) => {
     username: {
       type: Sequelize.STRING
     },
+    verify : {
+      type: Sequelize.BOOLEAN,
+      defaultValue: false,
+    }
     // account_created: {
     //   type: Sequelize.DATE
     // },
