@@ -44,20 +44,7 @@ function getEC2Credentials(AWS,rolename){
         
     return promise;
 };
-// function getEC2Credentials(AWS,rolename){
-//     var promise = new Promise((resolve,reject)=>{
-        
-//         var metadata = new AWS.MetadataService();
-        
-//         metadata.request('/latest/meta-data/iam/security-credentials/'+rolename,function(err,data){
-//             if(err) reject(err);   
-            
-//             resolve(JSON.parse(data));            
-//         });
-//     });
-        
-//     return promise;
-// };
+
 
 async function setCred(){
     getEC2Rolename(AWS)
@@ -98,7 +85,7 @@ async function createProfilePic(req, res, next){
         });
         var fileData;
     const user = await getUserByUserName(req.user.username);
-        
+        if(user.dataValues.verify){
         fs.writeFile("./uploads/image.jpeg", req.body, async (error) => {
           if (error) {
               console.log(error);
@@ -145,7 +132,13 @@ async function createProfilePic(req, res, next){
           });
         });
     });
-      
+} else {
+    res.status(401).send({
+        message:
+          "User not yet verified to perform this action"
+      });
+      logger.error("User not verified to add profile pic");
+}
     });
     
     }
@@ -153,6 +146,7 @@ async function createProfilePic(req, res, next){
 async function getProfilePic(req, res, next){
     client.increment('get-profile-pic-api');
     const user = await getUserByUserName(req.user.username);
+    if(user.dataValues.verify){
     const profile = await getProfilePicByUserId(user.id);
     if(profile){
         res.status(200).send({
@@ -166,7 +160,13 @@ async function getProfilePic(req, res, next){
     } else {
         res.sendStatus(404);
         logger.error("Image not found");
-    }    
+    } 
+} else {
+    res.status(401).send({
+        message: "User not yet verified"
+    });
+    logger.error("User not verified to get profile pic");
+}
 }
 
 async function deleteProfilePic(req, res, next){
@@ -187,6 +187,7 @@ async function deleteProfilePic(req, res, next){
             region: 'us-east-1'
         });
     const user = await getUserByUserName(req.user.username);
+    if(user.dataValues.verify){
     const profile = await getProfilePicByUserId(user.id);
     if(!profile){
         res.sendStatus(404);
@@ -207,6 +208,12 @@ async function deleteProfilePic(req, res, next){
           logger.info("Successfully deleted S3 object");
         }
       }).promise();
+    } else {
+        res.status(401).send({
+            message: "User not yet verified"
+        });
+        logger.error("User not verified to delete profile pic");
+    }
     });
 }
 async function getProfilePicByUserId(userId){
