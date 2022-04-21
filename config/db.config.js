@@ -6,9 +6,9 @@ const config = {
     password: env.DB_PASSWORD || 'Lolol12345',
     database: env.DB_NAME || 'csye6225',
     dialect: "mysql",
-    dialectOptions: {
-      ssl: 'Amazon RDS'
-  },
+  //   dialectOptions: {
+  //     ssl: 'Amazon RDS'
+  // },
     pool: {
     max: 5,
     min: 0,
