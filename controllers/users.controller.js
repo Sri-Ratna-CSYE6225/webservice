@@ -12,8 +12,8 @@ const client = new StatsD({
 });
 const User = db.users;
 const AWS = require('aws-sdk');
-updateAWSConfig(AWS);
-
+// updateAWSConfig(AWS);
+AWS.config.update({region: 'us-east-1'});
 var dynamo = new AWS.DynamoDB({
     region: 'us-east-1'
 });
