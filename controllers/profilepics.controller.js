@@ -12,38 +12,41 @@ const client = new StatsD({
     host: 'localhost',
     port: 8125
 });
-async function getEC2Rolename(AWS){
-    var promise = new Promise((resolve,reject)=>{
+// const AWS = require('aws-sdk');
+// // updateAWSConfig(AWS);
+AWS.config.update({region: 'us-east-1'});
+// async function getEC2Rolename(AWS){
+//     var promise = new Promise((resolve,reject)=>{
         
-        var metadata = new AWS.MetadataService();
+//         var metadata = new AWS.MetadataService();
         
-        metadata.request('/latest/meta-data/iam/security-credentials/',function(err,rolename){
-            if(err){ 
-                logger.error({"Error in getting Role name": err});
-                reject(err); }           
-            resolve(rolename);
-        });
-    });
+//         metadata.request('/latest/meta-data/iam/security-credentials/',function(err,rolename){
+//             if(err){ 
+//                 logger.error({"Error in getting Role name": err});
+//                 reject(err); }           
+//             resolve(rolename);
+//         });
+//     });
         
-    return promise;
-};
+//     return promise;
+// };
 
-function getEC2Credentials(AWS,rolename){
-    var promise = new Promise((resolve,reject)=>{
+// function getEC2Credentials(AWS,rolename){
+//     var promise = new Promise((resolve,reject)=>{
         
-        var metadata = new AWS.MetadataService();
+//         var metadata = new AWS.MetadataService();
         
-        metadata.request('/latest/meta-data/iam/security-credentials/'+rolename,function(err,data){
-            if(err) {
-                logger.error({"Error in getting Role name": err});
-                reject(err);
-            }
-            resolve(JSON.parse(data));            
-        });
-    });
+//         metadata.request('/latest/meta-data/iam/security-credentials/'+rolename,function(err,data){
+//             if(err) {
+//                 logger.error({"Error in getting Role name": err});
+//                 reject(err);
+//             }
+//             resolve(JSON.parse(data));            
+//         });
+//     });
         
-    return promise;
-};
+//     return promise;
+// };
 
 
 async function setCred(){
@@ -70,17 +73,17 @@ async function setCred(){
 async function createProfilePic(req, res, next){
     var s3;
     client.increment('add-profile-pic-api');
-    getEC2Rolename(AWS)
-    .then((rolename)=>{
-        logger.info("Successfully recieved role name");
-        return getEC2Credentials(AWS,rolename);
-    })
-    .then(async(credentials)=>{
-        logger.info("Successfully recieved credentials");
+    // getEC2Rolename(AWS)
+    // .then((rolename)=>{
+    //     logger.info("Successfully recieved role name");
+    //     return getEC2Credentials(AWS,rolename);
+    // })
+    // .then(async(credentials)=>{
+    //     logger.info("Successfully recieved credentials");
         AWS.config.update({region:'us-east-1'});
         s3 = new AWS.S3({
-            accessKeyId: credentials.accessKeyId,
-            secretAccessKey: credentials.secretAccessKey,
+            // accessKeyId: credentials.accessKeyId,
+            // secretAccessKey: credentials.secretAccessKey,
             region: 'us-east-1'
         });
         var fileData;
@@ -139,7 +142,7 @@ async function createProfilePic(req, res, next){
       });
       logger.error("User not verified to add profile pic");
 }
-    });
+    // });
     
     }
 
@@ -172,18 +175,18 @@ async function getProfilePic(req, res, next){
 async function deleteProfilePic(req, res, next){
     var s3;
     client.increment('delete-profile-pic-api');
-    getEC2Rolename(AWS)
-    .then((rolename)=>{
-        logger.info("Successfully recieved role name for delete");
-        return getEC2Credentials(AWS,rolename)
+    // getEC2Rolename(AWS)
+    // .then((rolename)=>{
+    //     logger.info("Successfully recieved role name for delete");
+    //     return getEC2Credentials(AWS,rolename)
      
-    })
-    .then(async(credentials)=>{
+    // })
+    // .then(async(credentials)=>{
         AWS.config.update({region:'us-east-1'});
-        logger.info("Successfully recieved credentials for delete");
+        // logger.info("Successfully recieved credentials for delete");
         s3 = new AWS.S3({
-            accessKeyId: credentials.accessKeyId,
-            secretAccessKey: credentials.secretAccessKey,
+            // accessKeyId: credentials.accessKeyId,
+            // secretAccessKey: credentials.secretAccessKey,
             region: 'us-east-1'
         });
     const user = await getUserByUserName(req.user.username);
@@ -214,7 +217,7 @@ async function deleteProfilePic(req, res, next){
         });
         logger.error("User not verified to delete profile pic");
     }
-    });
+    // });
 }
 async function getProfilePicByUserId(userId){
     return Profile.findOne({where : {user_id: userId}});
